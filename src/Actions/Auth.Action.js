@@ -3,14 +3,14 @@ import { authConstant } from './constant';
 
 
 export const login =(user)=>{
-    console.log(user)
+  //  console.log(user)
     return async(dispatch)=>{
 
         dispatch({type:authConstant.LOGIN_REQUEST})
       const res = await axios.post(`/admin/signin`,{
           ...user
       })
-        console.log(res)
+      //  console.log(res)
       if(res.status === 200){
           const {token,user} = res.data 
           localStorage.setItem('token',token)

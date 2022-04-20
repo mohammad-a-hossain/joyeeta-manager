@@ -7,12 +7,12 @@ const initState ={
     loading:false,
     error:''
 }
-const RebuildNewCategories=(parentId, categories, category)=>{
+const reBuildNewCategories=(parentId, categories, category)=>{
     let myCategories = []
   
 // if a new category where no parent id
 
-if(parentId === undefined){
+if(parentId == undefined){
     return [
         ...categories,
         {
@@ -28,30 +28,49 @@ if(parentId === undefined){
 
     for(let cat of categories){
 
-        if(cat._id === parentId){
+        // if(cat._id == parentId){
            
+        //     myCategories.push({
+        //         ...cat,
+        //        children:cat.children ? reBuildNewCategories(parentId,[...cat.children,{
+        //            _id:category._id,
+        //            name:category.name,
+        //            slug:category.slug,
+        //            parentId:category.parentId,
+        //            type: category.type,
+        //            children:category.children,
+        //        }],category) :[]
+        //     })
+        // }else{
+        //     myCategories.push({
+        //         ...cat,
+        //         children:cat.children ? reBuildNewCategories(parentId, cat.children, category): []
+        //     })
+         
+        // }
+        if(cat._id == parentId){
+            const newCategory = {
+                _id: category._id,
+                name: category.name,
+                slug: category.slug,
+                parentId: category.parentId,
+                type: category.type,
+                children: []
+            };
             myCategories.push({
                 ...cat,
-               children:cat.children ? RebuildNewCategories(parentId,[...cat.children,{
-                   _id:category._id,
-                   name:category.name,
-                   slug:category.slug,
-                   parentId:category.parentId,
-                   children:category.children,
-               }],category) :[]
+                children: cat.children.length > 0 ? [...cat.children, newCategory] : [newCategory]
             })
         }else{
             myCategories.push({
                 ...cat,
-                children:cat.children ? RebuildNewCategories(parentId, cat.children, category): []
-            })
-         
+                children: cat.children ? reBuildNewCategories(parentId, cat.children, category) : []
+            });
         }
-      
     }
 
 
-    return myCategories;
+    return myCategories
 
 }
 
@@ -73,7 +92,7 @@ export default (state = initState, action)=>{
         break;
         case  categoryConstant.ADDNEW_CATEGORY_SUCCESS:
             const category = action.payload.category
-            const updatedCategories = RebuildNewCategories(category.parentId, state.categories, category);
+            const updatedCategories = reBuildNewCategories(category.parentId, state.categories, category);
            // console.log('updated categoires', updatedCategories);
             state={
                 ...state,

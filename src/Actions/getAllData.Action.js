@@ -9,7 +9,7 @@ export const getAllData =()=>{
     return async dispatch =>{
         
         const res = await axios.post(`/getAllData`)
-        console.log(res)
+       // console.log(res)
         if(res.status === 200){
             const { categories,products} = res.data 
             dispatch({
@@ -22,6 +22,6 @@ export const getAllData =()=>{
                 
             })
         }
-        console.log(res);
+       //console.log(res);
     }
 }
