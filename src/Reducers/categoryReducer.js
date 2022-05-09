@@ -7,22 +7,21 @@ const initState ={
     loading:false,
     error:''
 }
-const reBuildNewCategories=(parentId, categories, category)=>{
+const reBuildNewCategories=(parentId,type, categories, category)=>{
     let myCategories = []
   
 // if a new category where no parent id
 
-if(parentId == undefined){
+if(parentId === undefined){
     return [
         ...categories,
         {
             _id: category._id,
             name: category.name,
             slug: category.slug,
-            type: category.type,
             children: []
         }
-    ];
+    ]
 }
 
 
@@ -48,13 +47,12 @@ if(parentId == undefined){
         //     })
          
         // }
-        if(cat._id == parentId){
+        if(cat._id == parentId ){
             const newCategory = {
                 _id: category._id,
                 name: category.name,
                 slug: category.slug,
                 parentId: category.parentId,
-                type: category.type,
                 children: []
             };
             myCategories.push({
@@ -64,12 +62,12 @@ if(parentId == undefined){
         }else{
             myCategories.push({
                 ...cat,
-                children: cat.children ? reBuildNewCategories(parentId, cat.children, category) : []
+                children: cat.children ? reBuildNewCategories(parentId,cat.children, category) : []
             });
         }
     }
 
-
+    console.log('find id',myCategories)
     return myCategories
 
 }
@@ -92,8 +90,8 @@ export default (state = initState, action)=>{
         break;
         case  categoryConstant.ADDNEW_CATEGORY_SUCCESS:
             const category = action.payload.category
-            const updatedCategories = reBuildNewCategories(category.parentId, state.categories, category);
-           // console.log('updated categoires', updatedCategories);
+            const updatedCategories = reBuildNewCategories(category.parentId,state.categories, category);
+            console.log('updated categoires', updatedCategories);
             state={
                 ...state,
                 categories:updatedCategories,

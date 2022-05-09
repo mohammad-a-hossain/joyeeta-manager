@@ -9,8 +9,8 @@ export const getAllData =()=>{
     return async dispatch =>{
         
         const res = await axios.post(`/getAllData`)
-       // console.log(res)
-        if(res.status === 200){
+      //  console.log(res)
+        if(res.status == 200){
             const { categories,products} = res.data 
             dispatch({
                 type:categoryConstant.GETALLCATEGORY_SUCCESS,

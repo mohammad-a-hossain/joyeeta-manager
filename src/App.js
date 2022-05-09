@@ -31,7 +31,7 @@ function App() {
       dispatch(isLoggedIn())
       }
      dispatch(getAllData())
-    // dispatch(getAllCategory())
+     //dispatch(getAllCategory())
   }, [])
 
 //console.log(isLoggedIn)
