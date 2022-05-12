@@ -1,7 +1,7 @@
 import axios from '../helpers/axios';
 import { categoryConstant } from './constant';
 
-export const getAllCategory =()=>{
+ const getAllCategory =()=>{
     return async dispatch =>{
 
         dispatch({type:categoryConstant.GETALLCATEGORY_REQUEST})
@@ -50,27 +50,60 @@ export const addCategory =(form)=>{
 // for edit category
 export const updatCategories =(form)=>{ 
     return async dispatch =>{
-        // dispatch({type:categoryConstant.UPDATE_CATEGORY_REQUEST})
+           
+        dispatch({type:categoryConstant.UPDATE_CATEGORY_REQUEST})
 
-        // try{
+         try{
             const res = await axios.post(`/category/updatecate`,form)
-            // console.log(res)
+            console.log(res)
      
              if(res.status === 201){
-                 console.log(res)
-                //  dispatch({type:categoryConstant.ADDNEW_CATEGORY_SUCCESS,
-                //            payload: {category: res.data.category}  
-                //          })
+                 //console.log(res)
+              dispatch({type:categoryConstant.UPDATE_CATEGORY_SUCCESS})
+              dispatch(getAllCategory())
              }else{
-                console.log(res)
-                //  dispatch({type:categoryConstant.ADDNEW_CATEGORY_FAILURE,
-                //              payload:res.data.error
+               // console.log(res)
+             dispatch({type:categoryConstant.DELETE_CATEGORY_FAILURE,
+                         payload:res.data.error
                             
-                //            })
+                       })
              }
-    //     }catch(error){
-    //        console.log(error.response)
-    //    }
+        }catch(error){
+          console.log(error.response)
+       }
       
      }
+}
+//deleteCategory route name fun
+export const deleteCategories=(ids)=>{
+    return async dispatch =>{
+         dispatch({type:categoryConstant.DELETE_CATEGORY_REQUEST})
+
+        try{
+            const res = await axios.post(`/category/delete`,{
+                payload:{
+                    ids
+                }
+            })
+           //  console.log(res)
+     
+              if(res.status === 201){
+                // return true
+                dispatch(getAllCategory())
+                dispatch({type:categoryConstant.DELETE_CATEGORY_SUCCESS })
+             }else{
+               // return false
+             dispatch({type:categoryConstant.DELETE_CATEGORY_FAILURE,
+                     payload:res.data.error 
+                      })
+             } 
+     }catch(error){
+        console.log(error.response)
+        }
+      
+     }
+}
+// re-using this function
+export {
+    getAllCategory
 }

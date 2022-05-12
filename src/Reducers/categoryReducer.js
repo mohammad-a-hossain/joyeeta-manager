@@ -7,7 +7,7 @@ const initState ={
     loading:false,
     error:''
 }
-const reBuildNewCategories=(parentId,type, categories, category)=>{
+const reBuildNewCategories=(parentId, categories, category)=>{
     let myCategories = []
   
 // if a new category where no parent id
@@ -19,6 +19,7 @@ if(parentId === undefined){
             _id: category._id,
             name: category.name,
             slug: category.slug,
+            type:category.type,
             children: []
         }
     ]
@@ -53,6 +54,7 @@ if(parentId === undefined){
                 name: category.name,
                 slug: category.slug,
                 parentId: category.parentId,
+                type:category.type,
                 children: []
             };
             myCategories.push({
@@ -67,7 +69,7 @@ if(parentId === undefined){
         }
     }
 
-    console.log('find id',myCategories)
+   // console.log('find id',myCategories)
     return myCategories
 
 }
@@ -107,7 +109,44 @@ export default (state = initState, action)=>{
                          
             }
         break;
-       
+       case categoryConstant.UPDATE_CATEGORY_REQUEST:
+           state={
+                ...state,
+                loading:true
+           }
+           break;
+       case categoryConstant.UPDATE_CATEGORY_SUCCESS:
+           state={
+               ...state,
+               loading:false
+           }
+           break;
+        case categoryConstant.UPDATE_CATEGORY_FAILURE:
+            state={
+                ...state,
+                error:action.payload.error,
+                loading:false
+            }
+           break;
+        case categoryConstant.DELETE_CATEGORY_REQUEST:
+            state={
+                ...state,
+                loading:true
+            }
+            break;
+          case categoryConstant.DELETE_CATEGORY_SUCCESS:
+              state={
+                  ...state,
+                  loading:false
+              }
+            break;
+          case categoryConstant.DELETE_CATEGORY_FAILURE:
+              state={
+                  ...state,
+                  loading:true,
+                  error:action.payload.error,
+              }
+              break;
     }
     return state
 }
